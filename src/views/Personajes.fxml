@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="panelFondo" prefHeight="800.0" prefWidth="1200.0" styleClass="gradiente" stylesheets="@../css/FondoStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PersonajesController">
+   <children>
+      <AnchorPane fx:id="panelInicio" layoutX="400.0" layoutY="100.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #333333; -fx-border-color: black; -fx-border-width: 5;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <ImageView fx:id="ivLogo" fitHeight="100.0" fitWidth="100.0" layoutX="500.0" layoutY="-36.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/RickAndMortyLogo.png" />
+               </image></ImageView>
+            <Label fx:id="lblTitulo1" layoutX="422.0" layoutY="172.0" text="Todos los personajes de" textFill="WHITE">
+               <font>
+                  <Font name="Cambria Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblTitulo2" layoutX="432.0" layoutY="227.0" text="Rick and Morty" textFill="WHITE">
+               <font>
+                  <Font name="Cambria Bold Italic" size="36.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="ivPersonaje1" fitHeight="200.0" fitWidth="200.0" layoutX="152.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="152.0" AnchorPane.topAnchor="93.0">
+               <image>
+                  <Image url="@../images/NoImagen.jpg" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="gpPersonaje1" hgap="5.0" layoutX="152.0" layoutY="298.0" prefHeight="50.0" prefWidth="200.0" vgap="5.0" AnchorPane.leftAnchor="152.0" AnchorPane.topAnchor="298.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="125.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="lblPersonaje1NombreTexto" text="Nombre:" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje1Nombre" text="---" textFill="WHITE" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje1EstadoTexto" text="Estado:" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje1Estado" text="---" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+            <Button fx:id="btnFavorito1" layoutX="357.0" layoutY="266.0" mnemonicParsing="false" onAction="#addFavorito1" style="-fx-background-color: black; -fx-border-color: white;" text="♡" textFill="LIME">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="ivPersonaje2" fitHeight="200.0" fitWidth="200.0" layoutX="755.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="93.0">
+               <image>
+                  <Image url="@../images/NoImagen.jpg" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="gpPersonaje2" hgap="5.0" layoutX="755.0" layoutY="298.0" prefHeight="50.0" prefWidth="200.0" vgap="5.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="298.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="125.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label fx:id="lblPersonaje2NombreTexto" text="Nombre:" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje2Nombre" text="---" textFill="WHITE" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje2EstadoTexto" text="Estado:" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje2Estado" text="---" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+            <Button fx:id="btnFavorito2" layoutX="950.0" layoutY="266.0" mnemonicParsing="false" onAction="#addFavorito2" style="-fx-background-color: black; -fx-border-color: white;" text="♡" textFill="LIME">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="ivPersonaje3" fitHeight="200.0" fitWidth="200.0" layoutX="157.0" layoutY="381.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="119.0" AnchorPane.leftAnchor="157.0">
+               <image>
+                  <Image url="@../images/NoImagen.jpg" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="gpPersonaje3" hgap="5.0" layoutX="157.0" layoutY="586.0" prefHeight="50.0" prefWidth="200.0" vgap="5.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="157.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="125.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label fx:id="lblPersonaje3NombreTexto" text="Nombre:" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje3Nombre" text="---" textFill="WHITE" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje3EstadoTexto" text="Estado:" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje3Estado" text="---" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+            <Button fx:id="btnFavorito3" layoutX="362.0" layoutY="544.0" mnemonicParsing="false" onAction="#addFavorito3" style="-fx-background-color: black; -fx-border-color: white;" text="♡" textFill="LIME">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="ivPersonaje4" fitHeight="200.0" fitWidth="200.0" layoutX="451.0" layoutY="378.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="122.0">
+               <image>
+                  <Image url="@../images/NoImagen.jpg" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="gpPersonaje4" hgap="5.0" layoutX="457.0" layoutY="583.0" prefHeight="50.0" prefWidth="200.0" vgap="5.0" AnchorPane.bottomAnchor="67.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="125.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label fx:id="lblPersonaje4NombreTexto" text="Nombre:" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje4Nombre" text="---" textFill="WHITE" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje4EstadoTexto" text="Estado:" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje4Estado" text="---" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+            <Button fx:id="btnFavorito4" layoutX="651.0" layoutY="541.0" mnemonicParsing="false" onAction="#addFavorito4" style="-fx-background-color: black; -fx-border-color: white;" text="♡" textFill="LIME">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="ivPersonaje5" fitHeight="200.0" fitWidth="200.0" layoutX="750.0" layoutY="381.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="119.0" AnchorPane.rightAnchor="150.0">
+               <image>
+                  <Image url="@../images/NoImagen.jpg" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="gpPersonaje5" hgap="5.0" layoutX="750.0" layoutY="586.0" prefHeight="50.0" prefWidth="200.0" vgap="5.0" AnchorPane.bottomAnchor="64.0" AnchorPane.rightAnchor="150.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="60.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="125.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label fx:id="lblPersonaje5NombreTexto" text="Nombre:" textFill="WHITE">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje5Nombre" text="---" textFill="WHITE" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje5EstadoTexto" text="Estado:" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblPersonaje5Estado" text="---" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Cambria Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+            <Button fx:id="btnFavorito5" layoutX="945.0" layoutY="544.0" mnemonicParsing="false" onAction="#addFavorito5" style="-fx-background-color: black; -fx-border-color: white;" text="♡" textFill="LIME">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnFavoritos" layoutX="898.0" layoutY="38.0" mnemonicParsing="false" onAction="#irAFavoritos" text="Ir a Favoritos">
+               <font>
+                  <Font name="Cambria Bold Italic" size="18.0" />
+               </font>
+            </Button>
+            <TextField fx:id="tfBuscar" layoutX="55.0" layoutY="40.0" prefHeight="30.0" prefWidth="281.0" promptText="Nombre a buscar">
+               <font>
+                  <Font name="Cambria" size="14.0" />
+               </font>
+            </TextField>
+            <Button fx:id="btnBuscar" layoutX="341.0" layoutY="41.0" mnemonicParsing="false" onAction="#buscar" text="Buscar">
+               <font>
+                  <Font name="Cambria Bold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Label fx:id="lblBuscarAviso" layoutX="55.0" layoutY="24.0" text="*Deja vacía la casilla para buscar todos los personajes" textFill="WHITE">
+               <font>
+                  <Font name="Cambria Italic" size="12.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnAnterior" layoutX="38.0" layoutY="350.0" mnemonicParsing="false" onAction="#anterior" text="Anterior">
+               <font>
+                  <Font name="Cambria Bold Italic" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnSiguiente" layoutX="990.0" layoutY="350.0" mnemonicParsing="false" onAction="#siguiente" text="Siguiente">
+               <font>
+                  <Font name="Cambria Bold Italic" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

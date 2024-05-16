@@ -285,7 +285,7 @@
                   <Font name="Cambria" size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="btnBuscar" layoutX="341.0" layoutY="41.0" mnemonicParsing="false" onAction="#buscar" text="Buscar">
+            <Button fx:id="btnBuscar" layoutX="341.0" layoutY="41.0" mnemonicParsing="false" onAction="#buscarFav" text="Buscar">
                <font>
                   <Font name="Cambria Bold Italic" size="14.0" />
                </font>
@@ -295,12 +295,12 @@
                   <Font name="Cambria Italic" size="12.0" />
                </font>
             </Label>
-            <Button fx:id="btnAnterior" layoutX="38.0" layoutY="350.0" mnemonicParsing="false" onAction="#anterior" text="Anterior">
+            <Button fx:id="btnAnterior" layoutX="38.0" layoutY="350.0" mnemonicParsing="false" onAction="#anteriorFav" text="Anterior">
                <font>
                   <Font name="Cambria Bold Italic" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="btnSiguiente" layoutX="990.0" layoutY="350.0" mnemonicParsing="false" onAction="#siguiente" text="Siguiente">
+            <Button fx:id="btnSiguiente" layoutX="990.0" layoutY="350.0" mnemonicParsing="false" onAction="#siguienteFav" text="Siguiente">
                <font>
                   <Font name="Cambria Bold Italic" size="14.0" />
                </font>

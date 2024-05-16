@@ -1,11 +1,15 @@
 package views;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import org.hibernate.Session;
+
 import api.BuscarPersonajesApi;
+import dao.UsuarioDaoImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Usuario;
-import utils.Listas;
+import resources.HibernateUtil;
 
 public class LoginController {
 
@@ -57,19 +61,17 @@ public class LoginController {
 	@FXML
 	private TextField tfUsuario;
 
+	Session session = HibernateUtil.getSession();
+	UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
+
 	@FXML
 	void Logearse(ActionEvent event) {
 
 		if (tfUsuario.getText().isEmpty() || pfPassword.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No puede haber celdas vacías.");
 		} else {
-			boolean usuarioCorrecto = false;
-			for (Usuario u : Listas.listaUsuarios) {
-				if (u.getNombre().equals(tfUsuario.getText()) && u.getPassword().equals(pfPassword.getText()))
-					usuarioCorrecto = true;
-			}
 
-			if (usuarioCorrecto) {
+			if (usuarioCorrecto()) {
 				JOptionPane.showMessageDialog(null, "Usuario correcto.");
 
 				BuscarPersonajesApi bpa = new BuscarPersonajesApi();
@@ -80,6 +82,7 @@ public class LoginController {
 					Parent root = loader.load();
 					Stage nuevaStage = new Stage();
 					nuevaStage.setScene(new Scene(root));
+					nuevaStage.resizableProperty().setValue(false);
 					nuevaStage.show();
 					Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 					stage.close();
@@ -100,6 +103,7 @@ public class LoginController {
 			Parent root = loader.load();
 			Stage nuevaStage = new Stage();
 			nuevaStage.setScene(new Scene(root));
+			nuevaStage.resizableProperty().setValue(false);
 			nuevaStage.show();
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.close();
@@ -111,6 +115,18 @@ public class LoginController {
 	@FXML
 	void initialize() {
 
+	}
+
+	private boolean usuarioCorrecto() {
+		boolean usuarioCorrecto = false;
+
+		List<Usuario> listaUsu = usuDao.searchAll();
+		for (Usuario usu : listaUsu) {
+			if (usu.getNombre().equals(tfUsuario.getText()) && usu.getPassword().equals(pfPassword.getText()))
+				usuarioCorrecto = true;
+		}
+
+		return usuarioCorrecto;
 	}
 
 }

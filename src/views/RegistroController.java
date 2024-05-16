@@ -1,10 +1,14 @@
 package views;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import org.hibernate.Session;
+
+import dao.UsuarioDaoImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Usuario;
+import resources.HibernateUtil;
 import utils.Listas;
 
 public class RegistroController {
@@ -62,6 +67,9 @@ public class RegistroController {
 	@FXML
 	private TextField tfUsuario;
 
+	Session session = HibernateUtil.getSession();
+	UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
+
 	@FXML
 	void initialize() {
 
@@ -74,20 +82,14 @@ public class RegistroController {
 		} else {
 
 			if (pfPassword.getText().equals(pfRepetirPassword.getText())) {
-				boolean nombreRepetido = false;
 
-				for (Usuario u : Listas.listaUsuarios) {
-					if (u.getNombre().equals(tfUsuario.getText()))
-						nombreRepetido = true;
-				}
-
-				if (nombreRepetido) {
+				if (nombreRepetido()) {
 
 					JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese nombre");
 
 				} else {
 					Usuario nuevo = new Usuario(tfUsuario.getText(), pfPassword.getText());
-					Listas.listaUsuarios.add(nuevo);
+					usuDao.insert(nuevo);
 
 					JOptionPane.showMessageDialog(null, "El nuevo usuario ha sido registrado.");
 
@@ -96,6 +98,7 @@ public class RegistroController {
 						Parent root = loader.load();
 						Stage nuevaStage = new Stage();
 						nuevaStage.setScene(new Scene(root));
+						nuevaStage.resizableProperty().setValue(false);
 						nuevaStage.show();
 						Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 						stage.close();
@@ -117,12 +120,25 @@ public class RegistroController {
 			Parent root = loader.load();
 			Stage nuevaStage = new Stage();
 			nuevaStage.setScene(new Scene(root));
+			nuevaStage.resizableProperty().setValue(false);
 			nuevaStage.show();
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private boolean nombreRepetido() {
+		boolean nombreRepetido = false;
+
+		List<Usuario> listaUsu = usuDao.searchAll();
+		for (Usuario usu : listaUsu) {
+			if (usu.getNombre().equals(tfUsuario.getText()))
+				nombreRepetido = true;
+		}
+
+		return nombreRepetido;
 	}
 
 }

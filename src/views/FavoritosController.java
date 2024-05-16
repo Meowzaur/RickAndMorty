@@ -178,43 +178,43 @@ public class FavoritosController {
 		Listas.listaAuxiliar.clear();
 		Listas.listaAuxiliar.addAll(Listas.listaFavoritos);
 
-		imprimirPersonajes();
+		imprimirPersonajesFav();
 	}
 
 	@FXML
-	void anterior(ActionEvent event) {
+	void anteriorFav(ActionEvent event) {
 		if (Listas.listaAuxiliar.size() < 6) {
 			JOptionPane.showMessageDialog(null, "No hay más personajes que mostrar.");
 			pagina = 0;
 		} else {
-			if (pagina == 0) {
+			if (pagina <= 0) {
 				pagina = (Listas.listaAuxiliar.size() - 1) / 5;
 			} else {
 				pagina--;
 			}
 			JOptionPane.showMessageDialog(null, "Estás en la página " + pagina + ".");
 		}
-		imprimirPersonajes();
+		imprimirPersonajesFav();
 	}
 
 	@FXML
-	void siguiente(ActionEvent event) {
+	void siguienteFav(ActionEvent event) {
 		if (Listas.listaAuxiliar.size() < 6) {
 			JOptionPane.showMessageDialog(null, "No hay más personajes que mostrar.");
 			pagina = 0;
 		} else {
-			if (pagina == (Listas.listaAuxiliar.size() - 1) / 5) {
+			if (pagina >= (Listas.listaAuxiliar.size() - 1) / 5) {
 				pagina = 0;
 			} else {
 				pagina++;
 			}
 			JOptionPane.showMessageDialog(null, "Estás en la página " + pagina + ".");
 		}
-		imprimirPersonajes();
+		imprimirPersonajesFav();
 	}
 
 	@FXML
-	void buscar(ActionEvent event) {
+	void buscarFav(ActionEvent event) {
 		Listas.listaAuxiliar.clear();
 		if (tfBuscar.getText().isEmpty()) {
 			Listas.listaAuxiliar.addAll(Listas.listaFavoritos);
@@ -226,7 +226,7 @@ public class FavoritosController {
 			}
 		}
 		pagina = 0;
-		imprimirPersonajes();
+		imprimirPersonajesFav();
 	}
 
 	@FXML
@@ -261,6 +261,7 @@ public class FavoritosController {
 			Parent root = loader.load();
 			Stage nuevaStage = new Stage();
 			nuevaStage.setScene(new Scene(root));
+			nuevaStage.resizableProperty().setValue(false);
 			nuevaStage.show();
 			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 			stage.close();
@@ -269,19 +270,20 @@ public class FavoritosController {
 		}
 	}
 
-	void imprimirPersonajes() {
-		imprimirPersonajesGeneral(lblPersonaje1Nombre, lblPersonaje1Estado, ivPersonaje1, btnDesfavorito1, pagina * 5);
-		imprimirPersonajesGeneral(lblPersonaje2Nombre, lblPersonaje2Estado, ivPersonaje2, btnDesfavorito2,
+	void imprimirPersonajesFav() {
+		imprimirPersonajeGeneralFav(lblPersonaje1Nombre, lblPersonaje1Estado, ivPersonaje1, btnDesfavorito1,
+				pagina * 5);
+		imprimirPersonajeGeneralFav(lblPersonaje2Nombre, lblPersonaje2Estado, ivPersonaje2, btnDesfavorito2,
 				pagina * 5 + 1);
-		imprimirPersonajesGeneral(lblPersonaje3Nombre, lblPersonaje3Estado, ivPersonaje3, btnDesfavorito3,
+		imprimirPersonajeGeneralFav(lblPersonaje3Nombre, lblPersonaje3Estado, ivPersonaje3, btnDesfavorito3,
 				pagina * 5 + 2);
-		imprimirPersonajesGeneral(lblPersonaje4Nombre, lblPersonaje4Estado, ivPersonaje4, btnDesfavorito4,
+		imprimirPersonajeGeneralFav(lblPersonaje4Nombre, lblPersonaje4Estado, ivPersonaje4, btnDesfavorito4,
 				pagina * 5 + 3);
-		imprimirPersonajesGeneral(lblPersonaje5Nombre, lblPersonaje5Estado, ivPersonaje5, btnDesfavorito5,
+		imprimirPersonajeGeneralFav(lblPersonaje5Nombre, lblPersonaje5Estado, ivPersonaje5, btnDesfavorito5,
 				pagina * 5 + 4);
 	}
 
-	void imprimirPersonajesGeneral(Label nombre, Label estado, ImageView imagen, Button button, int num) {
+	void imprimirPersonajeGeneralFav(Label nombre, Label estado, ImageView imagen, Button button, int num) {
 		if (Listas.listaAuxiliar.size() > num) {
 			nombre.setText(Listas.listaAuxiliar.get(num).getName());
 			estado.setText(Listas.listaAuxiliar.get(num).getStatus());
@@ -297,18 +299,28 @@ public class FavoritosController {
 		}
 	}
 
-	// MODIFICAR
 	void quitarFavoritoGeneral(int num) {
-		Listas.listaFavoritos.remove(num);
-		Listas.listaAuxiliar.remove(num);
+		int id = Listas.listaAuxiliar.get(num).getId();
+		for (Personaje p : Listas.listaFavoritos) {
+			if (p.getId() == id) {
+				Listas.listaFavoritos.remove(p);
+				break;
+			}
+		}
+		for (Personaje p : Listas.listaAuxiliar) {
+			if (p.getId() == id) {
+				Listas.listaAuxiliar.remove(p);
+				break;
+			}
+		}
 
 //		if (Listas.listaFavoritos.isEmpty()) {
 //			
 //		} else {
 //			
 //		}
-		
-		imprimirPersonajes();
+
+		imprimirPersonajesFav();
 	}
 
 }

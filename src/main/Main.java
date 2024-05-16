@@ -1,10 +1,8 @@
-package application;
+package main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import models.Usuario;
-import utils.Listas;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
@@ -12,11 +10,6 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-
-		Usuario u0 = new Usuario("a", "a");
-		Usuario u1 = new Usuario("Pablo", "Bruno");
-		Listas.listaUsuarios.add(u0);
-		Listas.listaUsuarios.add(u1);
 
 		AnchorPane ap;
 
@@ -26,6 +19,7 @@ public class Main extends Application {
 			ap = loader.load();
 			Scene scene = new Scene(ap);
 			primaryStage.setScene(scene);
+			primaryStage.resizableProperty().setValue(false);
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -208,7 +208,7 @@ public class PersonajesController {
 		if (Listas.listaAuxiliar.size() < 6) {
 			JOptionPane.showMessageDialog(null, "No hay más personajes que mostrar.");
 		} else {
-			if (pagina == 0) {
+			if (pagina <= 0) {
 				pagina = (Listas.listaAuxiliar.size() - 1) / 5;
 			} else {
 				pagina--;
@@ -223,7 +223,7 @@ public class PersonajesController {
 		if (Listas.listaAuxiliar.size() < 6) {
 			JOptionPane.showMessageDialog(null, "No hay más personajes que mostrar.");
 		} else {
-			if (pagina == (Listas.listaAuxiliar.size() - 1) / 5) {
+			if (pagina >= (Listas.listaAuxiliar.size() - 1) / 5) {
 				pagina = 0;
 			} else {
 				pagina++;
@@ -259,6 +259,7 @@ public class PersonajesController {
 				Parent root = loader.load();
 				Stage nuevaStage = new Stage();
 				nuevaStage.setScene(new Scene(root));
+				nuevaStage.resizableProperty().setValue(false);
 				nuevaStage.show();
 				Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
 				stage.close();

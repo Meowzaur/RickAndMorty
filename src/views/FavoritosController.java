@@ -6,6 +6,10 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import org.hibernate.Session;
+
+import dao.PersonajeDaoImpl;
+import dao.UsuarioPersonajesDaoImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +24,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import models.Personaje;
+import models.Usuario;
+import resources.HibernateUtil;
 import utils.Listas;
 
 public class FavoritosController {
@@ -172,6 +178,20 @@ public class FavoritosController {
 	private TextField tfBuscar;
 
 	int pagina = 0;
+
+	Session session = HibernateUtil.getSession();
+	PersonajeDaoImpl perDao = new PersonajeDaoImpl(session);
+	UsuarioPersonajesDaoImpl usuPerDao = new UsuarioPersonajesDaoImpl(session);
+
+	private Usuario usuario;
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
 	@FXML
 	void initialize() {

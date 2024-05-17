@@ -88,8 +88,7 @@ public class RegistroController {
 					JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese nombre");
 
 				} else {
-					Usuario nuevo = new Usuario(tfUsuario.getText(), pfPassword.getText());
-					usuDao.insert(nuevo);
+					usuDao.insert(new Usuario(tfUsuario.getText(), pfPassword.getText()));
 
 					JOptionPane.showMessageDialog(null, "El nuevo usuario ha sido registrado.");
 

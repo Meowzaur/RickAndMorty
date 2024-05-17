@@ -2,10 +2,15 @@ package views;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import org.hibernate.Session;
+
+import dao.PersonajeDaoImpl;
+import dao.UsuarioPersonajesDaoImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +25,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import models.Personaje;
+import models.Usuario;
+import models.UsuarioPersonajes;
+import models.UsuarioPersonajesId;
+import resources.HibernateUtil;
 import utils.Listas;
 
 public class PersonajesController {
@@ -170,6 +179,20 @@ public class PersonajesController {
 
 	int pagina = 0;
 
+	Session session = HibernateUtil.getSession();
+	PersonajeDaoImpl perDao = new PersonajeDaoImpl(session);
+	UsuarioPersonajesDaoImpl usuPerDao = new UsuarioPersonajesDaoImpl(session);
+
+	private Usuario usuario;
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	@FXML
 	void initialize() {
 		Listas.listaAuxiliar.clear();
@@ -299,31 +322,54 @@ public class PersonajesController {
 	}
 
 	private void addFavoritoGeneral(Label label, Button button, int num) {
-		boolean coincide = false;
-		for (Personaje p : Listas.listaFavoritos) {
-			if (Listas.listaAuxiliar.get(num).getId() == p.getId()) {
-				coincide = true;
-			}
+		if (!estaEnPersonajes(num)) {
+			perDao.insert(Listas.listaAuxiliar.get(num));
 		}
-		if (coincide) {
+
+		if (estaEnFavoritos(num)) {
 			JOptionPane.showMessageDialog(null,
-					"El personaje " + label.getText() + " ya existe en tu lista de favoritos.");
+					"El personaje " + label.getText() + " YA EXISTE en tu lista de favoritos.");
 		} else {
-			Listas.listaFavoritos.add(Listas.listaAuxiliar.get(num));
+
+			usuPerDao.insert(
+					new UsuarioPersonajes(new UsuarioPersonajesId(getUsuario(), Listas.listaAuxiliar.get(num))));
 			JOptionPane.showMessageDialog(null,
-					"El personaje " + label.getText() + " se ha agregado a tu lista de favoritos.");
+					"El personaje " + label.getText() + " SE HA AGREGADO a tu lista de favoritos.");
+
 		}
 		button.setDisable(true);
 		button.setVisible(false);
 	}
 
-	private boolean estaEnFavoritos(int num) {
+	private boolean estaEnPersonajes(int num) {
 		boolean esta = false;
-		for (Personaje p : Listas.listaFavoritos) {
-			if (p.getId() == Listas.listaAuxiliar.get(num).getId()) {
+
+		List<Personaje> listaPer = perDao.searchAll();
+		for (Personaje per : listaPer) {
+			if (per.getId() == Listas.listaAuxiliar.get(num).getId()) {
 				esta = true;
 			}
 		}
+
 		return esta;
 	}
+
+	private boolean estaEnFavoritos(int num) {
+		boolean esta = false;
+
+		List<UsuarioPersonajes> listaUsuPer = usuPerDao.searchAll();
+		for (UsuarioPersonajes usuPer : listaUsuPer) {
+			System.out.println(usuPer.getId().getUsuario().getNombre());
+			System.out.println(getUsuario().getNombre());
+			System.out.println(usuPer.getId().getPersonaje().getId());
+			System.out.println(num);
+			if (usuPer.getId().getUsuario().getNombre().equals(getUsuario().getNombre())
+					&& usuPer.getId().getPersonaje().getId() == num + 1) {
+				esta = true;
+			}
+		}
+
+		return esta;
+	}
+
 }

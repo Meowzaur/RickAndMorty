@@ -1,7 +1,7 @@
 package dao;
 
-import models.Personaje;
+import models.UsuarioPersonajes;
 
-public interface UsuarioPersonajesDaoInt extends CommonDaoInt<Personaje> {
+public interface UsuarioPersonajesDaoInt extends CommonDaoInt<UsuarioPersonajes> {
 
 }

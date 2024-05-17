@@ -80,6 +80,13 @@ public class LoginController {
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("Personajes.fxml"));
 					Parent root = loader.load();
+
+					PersonajesController pc = loader.getController();
+					//FavoritosController fc = loader.getController();
+					Usuario u = getUsuario();
+					pc.setUsuario(u);
+					//fc.setUsuario(u);
+
 					Stage nuevaStage = new Stage();
 					nuevaStage.setScene(new Scene(root));
 					nuevaStage.resizableProperty().setValue(false);
@@ -127,6 +134,16 @@ public class LoginController {
 		}
 
 		return usuarioCorrecto;
+	}
+
+	private Usuario getUsuario() {
+		List<Usuario> listaUsu = usuDao.searchAll();
+		for (Usuario usu : listaUsu) {
+			if (usu.getNombre().equals(tfUsuario.getText()) && usu.getPassword().equals(pfPassword.getText())) {
+				return usu;
+			}
+		}
+		return null;
 	}
 
 }

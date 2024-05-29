@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 @Entity(name = "usuario")
 public class Usuario implements java.io.Serializable {
 
+	// Atributos
 	@Id
 	@Column(name = "nombre")
 	private String nombre;
@@ -22,28 +23,23 @@ public class Usuario implements java.io.Serializable {
 	@OneToMany(mappedBy = "id.usuario", cascade = CascadeType.ALL)
 	private Set<UsuarioPersonajes> usuarioOTM = new HashSet<UsuarioPersonajes>(0);
 	
+	// Constructor vacío
 	public Usuario() {
 	}
 
+	// Constructor
 	public Usuario(String nombre, String password) {
 		this.nombre = nombre;
 		this.password = password;
 	}
 
+	// Getters
 	public String getNombre() {
 		return nombre;
 	}
 
 	public String getPassword() {
 		return password;
-	}
-
-	public Set<UsuarioPersonajes> getUsuarioOTM() {
-		return usuarioOTM;
-	}
-
-	public void setUsuarioOTM(Set<UsuarioPersonajes> usuarioOTM) {
-		this.usuarioOTM = usuarioOTM;
 	}
 
 }

@@ -13,6 +13,7 @@ public class Main extends Application {
 
 		AnchorPane ap;
 
+		// Inicia el programa abriendo la ventana de Login
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("/views/Login.fxml"));

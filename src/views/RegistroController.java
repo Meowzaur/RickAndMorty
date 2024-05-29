@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import org.hibernate.Session;
 
 import dao.UsuarioDaoImpl;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,10 +25,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Usuario;
 import resources.HibernateUtil;
-import utils.Listas;
 
 public class RegistroController {
 
+	// Atributos
 	@FXML
 	private ResourceBundle resources;
 
@@ -70,28 +71,52 @@ public class RegistroController {
 	Session session = HibernateUtil.getSession();
 	UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
 
+	/**
+	 * Método que se activa al iniciar la ventana.
+	 * 
+	 * Si se pulsa el botón de cerrar ventana, el programa cierra la sesión de
+	 * hibernate.
+	 */
 	@FXML
 	void initialize() {
-
+		Platform.runLater(() -> {
+			Stage stage = (Stage) panelFondo.getScene().getWindow();
+			stage.setOnCloseRequest(event -> {
+				HibernateUtil.closeSession();
+			});
+		});
 	}
 
+	/**
+	 * Método que comprueba si el registro es correcto. Si alguna celda está vacía,
+	 * si las celdas de contraseñas son diferentes, o si el nombre de usuario
+	 * coincide con un nombre existente en la base de datos, entonces el método
+	 * mostrará una ventana que informará del error cometido. En caso de que ninguno
+	 * de estos errores suceda, agregará este usuario a la base de datos y abrirá la
+	 * ventana de login y cerrará la ventana actual.
+	 * 
+	 * @param event Clickar en el botón "Registrar"
+	 */
 	@FXML
 	void registrar(ActionEvent event) {
+		// Comprueba si hay celdas vacías
 		if (tfUsuario.getText().isEmpty() || pfPassword.getText().isEmpty() || pfRepetirPassword.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No puede haber celdas vacías.");
 		} else {
-
+			// Comprueba que las contraseñas coincidan
 			if (pfPassword.getText().equals(pfRepetirPassword.getText())) {
-
+				// Comprueba que el nombre de usuario esté o no en la base de datos
 				if (nombreRepetido()) {
 
 					JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese nombre");
 
 				} else {
+					// Agrega el nuevo usuario
 					usuDao.insert(new Usuario(tfUsuario.getText(), pfPassword.getText()));
 
 					JOptionPane.showMessageDialog(null, "El nuevo usuario ha sido registrado.");
 
+					// Abre la ventana de login y cierra la ventana actual
 					try {
 						FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
 						Parent root = loader.load();
@@ -112,6 +137,11 @@ public class RegistroController {
 		}
 	}
 
+	/**
+	 * Método que abre la ventana de Login y cierra la ventana actual
+	 * 
+	 * @param event clickar en el label "atrás".
+	 */
 	@FXML
 	void atras(MouseEvent event) {
 		try {
@@ -128,6 +158,12 @@ public class RegistroController {
 		}
 	}
 
+	/**
+	 * Método que comprueba que el nombre en la celda de usuario se repita o no con
+	 * alguno de la base de datos
+	 * 
+	 * @return Devuelve true si el nombre es coincidente. False en caso contrario.
+	 */
 	private boolean nombreRepetido() {
 		boolean nombreRepetido = false;
 

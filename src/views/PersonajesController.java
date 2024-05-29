@@ -11,6 +11,7 @@ import org.hibernate.Session;
 
 import dao.PersonajeDaoImpl;
 import dao.UsuarioPersonajesDaoImpl;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,6 +34,7 @@ import utils.Listas;
 
 public class PersonajesController {
 
+	// Atributos
 	@FXML
 	private ResourceBundle resources;
 
@@ -183,49 +185,94 @@ public class PersonajesController {
 	PersonajeDaoImpl perDao = new PersonajeDaoImpl(session);
 	UsuarioPersonajesDaoImpl usuPerDao = new UsuarioPersonajesDaoImpl(session);
 
-	private Usuario usuario;
+	private Usuario usuario = LoginController.u;
 
+	/**
+	 * Getter usuario
+	 * 
+	 * @return usuario
+	 */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
+	/**
+	 * Método que se inicia al cargar la ventana. Añade los personajes cargados por
+	 * la API a una lista auxiliar, que es con la que el programa va a trabajar,
+	 * dejando la lista de personajes intacta. También tiene un método que termina
+	 * la sesión de Hibernate cuando se cierra la ventana.
+	 */
 	@FXML
 	void initialize() {
 		Listas.listaAuxiliar.clear();
 		Listas.listaAuxiliar.addAll(Listas.listaPersonajes);
 
 		imprimirPersonajes();
+
+		Platform.runLater(() -> {
+			Stage stage = (Stage) panelFondo.getScene().getWindow();
+			stage.setOnCloseRequest(event -> {
+				HibernateUtil.closeSession();
+			});
+		});
 	}
 
+	/**
+	 * Añade el personaje a favoritos que está arriba izquierda de la ventana.
+	 * 
+	 * @param event Pulsar el botón del corazón que está arriba izquierda.
+	 */
 	@FXML
 	void addFavorito1(ActionEvent event) {
 		addFavoritoGeneral(lblPersonaje1Nombre, btnFavorito1, pagina * 5);
 	}
 
+	/**
+	 * Añade el personaje a favoritos que está arriba derecha de la ventana.
+	 * 
+	 * @param event Pulsar el botón del corazón que está arriba derecha.
+	 */
 	@FXML
 	void addFavorito2(ActionEvent event) {
 		addFavoritoGeneral(lblPersonaje2Nombre, btnFavorito2, pagina * 5 + 1);
 	}
 
+	/**
+	 * Añade el personaje a favoritos que está abajo izquierda de la ventana.
+	 * 
+	 * @param event Pulsar el botón del corazón que está abajo izquierda.
+	 */
 	@FXML
 	void addFavorito3(ActionEvent event) {
 		addFavoritoGeneral(lblPersonaje3Nombre, btnFavorito3, pagina * 5 + 2);
 	}
 
+	/**
+	 * Añade el personaje a favoritos que está abajo centro de la ventana.
+	 * 
+	 * @param event Pulsar el botón del corazón que está abajo centro.
+	 */
 	@FXML
 	void addFavorito4(ActionEvent event) {
 		addFavoritoGeneral(lblPersonaje4Nombre, btnFavorito4, pagina * 5 + 3);
 	}
 
+	/**
+	 * Añade el personaje a favoritos que está abajo izquierda de la ventana.
+	 * 
+	 * @param event Pulsar el botón del corazón que está abajo izquierda.
+	 */
 	@FXML
 	void addFavorito5(ActionEvent event) {
 		addFavoritoGeneral(lblPersonaje5Nombre, btnFavorito5, pagina * 5 + 4);
 	}
 
+	/**
+	 * Carga los 5 personajes anteriores, dependiendo de cuáles estén cargados
+	 * actualmente. Si está mostrando los primeros, mostrará los últimos.
+	 * 
+	 * @param event Pulsar el botón anterior.
+	 */
 	@FXML
 	void anterior(ActionEvent event) {
 		if (Listas.listaAuxiliar.size() < 6) {
@@ -236,11 +283,16 @@ public class PersonajesController {
 			} else {
 				pagina--;
 			}
-			JOptionPane.showMessageDialog(null, "Estás en la página " + pagina + ".");
 			imprimirPersonajes();
 		}
 	}
 
+	/**
+	 * Carga los 5 personajes siguientes, dependiendo de cuáles estén cargados
+	 * actualmente. Si está mostrando los últimos, mostrará los primeros.
+	 * 
+	 * @param event Pulsar el botón anterior.
+	 */
 	@FXML
 	void siguiente(ActionEvent event) {
 		if (Listas.listaAuxiliar.size() < 6) {
@@ -256,6 +308,12 @@ public class PersonajesController {
 		}
 	}
 
+	/**
+	 * Método que modificará la lista auxiliar con los personajes que coincidan con
+	 * el texto indicado, ya sean en minúsculas o mayúsculas.
+	 * 
+	 * @param event Busca dependiendo del contenido del textfield tfBuscar.
+	 */
 	@FXML
 	void buscar(ActionEvent event) {
 		Listas.listaAuxiliar.clear();
@@ -272,26 +330,32 @@ public class PersonajesController {
 		imprimirPersonajes();
 	}
 
+	/**
+	 * Método que abre la ventana de Favoritos, cerrando la ventana actual.
+	 * 
+	 * @param event Evento de clickar en el botón "Favoritos".
+	 */
 	@FXML
 	void irAFavoritos(ActionEvent event) {
-		if (Listas.listaFavoritos.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "La lista de personajes favoritos está vacía.");
-		} else {
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("Favoritos.fxml"));
-				Parent root = loader.load();
-				Stage nuevaStage = new Stage();
-				nuevaStage.setScene(new Scene(root));
-				nuevaStage.resizableProperty().setValue(false);
-				nuevaStage.show();
-				Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-				stage.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Favoritos.fxml"));
+			Parent root = loader.load();
+			Stage nuevaStage = new Stage();
+			nuevaStage.setScene(new Scene(root));
+			nuevaStage.resizableProperty().setValue(false);
+			nuevaStage.show();
+			Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+			stage.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 	}
 
+	/**
+	 * Actualiza los datos e imágenes de los personajes según las opciones
+	 * seleccionadas.
+	 */
 	private void imprimirPersonajes() {
 		imprimirPersonajeGeneral(lblPersonaje1Nombre, lblPersonaje1Estado, ivPersonaje1, btnFavorito1, pagina * 5);
 		imprimirPersonajeGeneral(lblPersonaje2Nombre, lblPersonaje2Estado, ivPersonaje2, btnFavorito2, pagina * 5 + 1);
@@ -300,6 +364,20 @@ public class PersonajesController {
 		imprimirPersonajeGeneral(lblPersonaje5Nombre, lblPersonaje5Estado, ivPersonaje5, btnFavorito5, pagina * 5 + 4);
 	}
 
+	/**
+	 * Control individual de las actualizaciones de los datos de los personajes,
+	 * cambiando el nombre, el estado y la imagen del personaje. También detecta si
+	 * el personaje está o no en favoritos para activar o desactivar el botón de
+	 * favoritos. En caso de que no haya personaje (mostrar menos personajes de 5),
+	 * coloca tres guiones como que no hay personaje, junto con una imagen de 'no
+	 * imagen avaliable'.
+	 * 
+	 * @param nombre El nombre del personaje correspondiente.
+	 * @param estado El estado del personaje correspondiente.
+	 * @param imagen Url de la imagen del personaje correspondiente.
+	 * @param button Estado del botón del botón correspondiente.
+	 * @param num    Número en la posición del personaje en la lista auxiliar.
+	 */
 	private void imprimirPersonajeGeneral(Label nombre, Label estado, ImageView imagen, Button button, int num) {
 		if (Listas.listaAuxiliar.size() > num) {
 			nombre.setText(Listas.listaAuxiliar.get(num).getName());
@@ -321,16 +399,21 @@ public class PersonajesController {
 		}
 	}
 
+	/**
+	 * Comprueba si el personaje está en la base de datos, y Si no está, lo agrega.
+	 * Comprueba si el personaje está asociado a favoritos del usuario, y si no
+	 * está, lo agrega a favoritos. Desactiva el botón que acaba de ser pulsado.
+	 * 
+	 * @param label  Nombre del personaje elegido.
+	 * @param button Botón cual ha sido pulsado.
+	 * @param num    Número de la lista auxiliar.
+	 */
 	private void addFavoritoGeneral(Label label, Button button, int num) {
 		if (!estaEnPersonajes(num)) {
 			perDao.insert(Listas.listaAuxiliar.get(num));
 		}
 
-		if (estaEnFavoritos(num)) {
-			JOptionPane.showMessageDialog(null,
-					"El personaje " + label.getText() + " YA EXISTE en tu lista de favoritos.");
-		} else {
-
+		if (!estaEnFavoritos(num)) {
 			usuPerDao.insert(
 					new UsuarioPersonajes(new UsuarioPersonajesId(getUsuario(), Listas.listaAuxiliar.get(num))));
 			JOptionPane.showMessageDialog(null,
@@ -341,6 +424,14 @@ public class PersonajesController {
 		button.setVisible(false);
 	}
 
+	/**
+	 * Comprueba si el personaje está en la lista de personajes de la base de datos.
+	 * 
+	 * @param num Es el número de la posición en la lista auxiliar de los
+	 *            personajes.
+	 * @return Devuelve true si el personaje ya existe en la base de datos. False si
+	 *         no existe en la base de datos.
+	 */
 	private boolean estaEnPersonajes(int num) {
 		boolean esta = false;
 
@@ -354,15 +445,20 @@ public class PersonajesController {
 		return esta;
 	}
 
+	/**
+	 * Comprueba si el personaje está en la lista de favoritos de la base de datos
+	 * junto con el nombre del usuario que desea comprobarlo.
+	 * 
+	 * @param num Es el número de la posición en la lista auxiliar de los
+	 *            personajes.
+	 * @return Devuelve true si el personaje junto con el usuario ya existen
+	 *         enlazados en la base de datos. False si no están enlazados.
+	 */
 	private boolean estaEnFavoritos(int num) {
 		boolean esta = false;
 
 		List<UsuarioPersonajes> listaUsuPer = usuPerDao.searchAll();
 		for (UsuarioPersonajes usuPer : listaUsuPer) {
-			System.out.println(usuPer.getId().getUsuario().getNombre());
-			System.out.println(getUsuario().getNombre());
-			System.out.println(usuPer.getId().getPersonaje().getId());
-			System.out.println(num);
 			if (usuPer.getId().getUsuario().getNombre().equals(getUsuario().getNombre())
 					&& usuPer.getId().getPersonaje().getId() == num + 1) {
 				esta = true;

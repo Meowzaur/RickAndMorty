@@ -13,10 +13,16 @@ import utils.Listas;
 
 public class BuscarPersonajesApi {
 
+	/*
+	 * Se encarga de buscar todos los personajes de la serie Rick and Morty y
+	 * agregarlos a una lista dentro del programa.
+	 */
 	public void agregarPersonajesApi() {
 
 		OkHttpClient client = new OkHttpClient();
 
+		// Recorre este bucle 42 veces porque son las páginas máximas actuales que
+		// contienen personajes.
 		for (int i = 1; i <= 42; i++) {
 			Request request = new Request.Builder().url("https://rickandmortyapi.com/api/character/?page=" + i).get()
 					.addHeader("accept", "application/json")
@@ -25,12 +31,15 @@ public class BuscarPersonajesApi {
 					.build();
 
 			try {
+				// Se encarga de almacenar la respuesta en un string.
 				Response response = client.newCall(request).execute();
 				String respuesta = response.body().string();
 
+				// Se guarda el string en un Json para poder trabajar con él.
 				Gson gson = new Gson();
 				RespuestaAPI respAPI = gson.fromJson(respuesta, RespuestaAPI.class);
 
+				// Se agregan a la lista de personajes
 				for (Personaje p : respAPI.getResults()) {
 					Listas.listaPersonajes.add(p);
 				}

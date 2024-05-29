@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 @Entity(name = "personaje")
 public class Personaje implements java.io.Serializable {
 
+	// Atributos
 	@Id
 	@Column(name = "id")
 	private int id;
@@ -28,9 +29,11 @@ public class Personaje implements java.io.Serializable {
 	@OneToMany(mappedBy = "id.personaje", cascade = CascadeType.ALL)
 	private Set<UsuarioPersonajes> personajeOTM = new HashSet<UsuarioPersonajes>(0);
 	
+	// Constructor vacío
 	public Personaje() {
 	}
 
+	// Constructor
 	public Personaje(int id, String name, String status, String image) {
 		this.id = id;
 		this.name = name;
@@ -38,6 +41,7 @@ public class Personaje implements java.io.Serializable {
 		this.image = image;
 	}
 
+	// Getters
 	public int getId() {
 		return id;
 	}
@@ -52,14 +56,6 @@ public class Personaje implements java.io.Serializable {
 
 	public String getImage() {
 		return image;
-	}
-
-	public Set<UsuarioPersonajes> getPersonajeOTM() {
-		return personajeOTM;
-	}
-
-	public void setPersonajeOTM(Set<UsuarioPersonajes> personajeOTM) {
-		this.personajeOTM = personajeOTM;
 	}
 
 }

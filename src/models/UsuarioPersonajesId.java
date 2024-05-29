@@ -18,7 +18,6 @@ public class UsuarioPersonajesId implements java.io.Serializable {
 	}
 
 	public UsuarioPersonajesId(Usuario usuario, Personaje personaje) {
-		super();
 		this.usuario = usuario;
 		this.personaje = personaje;
 	}

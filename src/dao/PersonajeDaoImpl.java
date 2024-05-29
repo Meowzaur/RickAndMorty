@@ -1,37 +1,22 @@
 package dao;
 
-import java.util.List;
-
 import org.hibernate.Session;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import models.Personaje;
 
 public class PersonajeDaoImpl extends CommonDaoImpl<Personaje> implements PersonajeDaoInt {
 
+	/** Sesion de conexion a BD */
 	private Session session;
 
+	/**
+	 * Constructor de la clase
+	 * 
+	 * @param session Session de la base de datos
+	 */
 	public PersonajeDaoImpl(Session session) {
 		super(session);
 		this.session = session;
-	}
-
-	@Override
-	public List<Personaje> searchByName(String name) {
-		if (!session.getTransaction().equals(TransactionStatus.ACTIVE)) {
-			session.getTransaction().begin();
-		}
-
-		return session.createQuery("FROM Personaje WHERE name='" + name + "'").list();
-	}
-
-	@Override
-	public Personaje searchByID(int id) {
-		if (!session.getTransaction().equals(TransactionStatus.ACTIVE)) {
-			session.getTransaction().begin();
-		}
-
-		return (Personaje) session.createQuery("FROM Empleado WHERE id='" + id + "'").uniqueResult();
 	}
 
 }

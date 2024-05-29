@@ -10,6 +10,7 @@ import org.hibernate.Session;
 
 import api.BuscarPersonajesApi;
 import dao.UsuarioDaoImpl;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +29,7 @@ import resources.HibernateUtil;
 
 public class LoginController {
 
+	// Atributos
 	@FXML
 	private ResourceBundle resources;
 
@@ -64,28 +66,53 @@ public class LoginController {
 	Session session = HibernateUtil.getSession();
 	UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
 
+	public static Usuario u;
+
+	/**
+	 * Método que se activa al iniciar la ventana.
+	 * 
+	 * Si se pulsa el botón de cerrar ventana, el programa cierra la sesión de
+	 * hibernate.
+	 */
+	@FXML
+	void initialize() {
+		Platform.runLater(() -> {
+			Stage stage = (Stage) panelFondo.getScene().getWindow();
+			stage.setOnCloseRequest(event -> {
+				HibernateUtil.closeSession();
+			});
+		});
+	}
+
+	/**
+	 * Método que comprueba si el login es correcto o no. Si alguna celda está vacía
+	 * o alguna celda no coincide con los datos en la base de datos, saltará una
+	 * ventana emergente con su respectivo error. En caso de que coincida, irá
+	 * directo a la ventana de personajes (tarda unos segundos en hacer esta
+	 * acción).
+	 * 
+	 * @param event Evento de clickar en el botón de login.
+	 */
 	@FXML
 	void Logearse(ActionEvent event) {
 
+		// Comprueba que las celdas estén vacías.
 		if (tfUsuario.getText().isEmpty() || pfPassword.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No puede haber celdas vacías.");
 		} else {
-
+			// Comprueba que el usuario esté en la base de datos.
 			if (usuarioCorrecto()) {
-				JOptionPane.showMessageDialog(null, "Usuario correcto.");
 
+				u = getUsuario();
+
+				// Agrega los personajes de la API (es esta acción la que tarda unos segundos).
 				BuscarPersonajesApi bpa = new BuscarPersonajesApi();
 				bpa.agregarPersonajesApi();
 
+				// Abre la ventana de Personajes y cierra la actual.
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("Personajes.fxml"));
 					Parent root = loader.load();
-
-					PersonajesController pc = loader.getController();
-					//FavoritosController fc = loader.getController();
-					Usuario u = getUsuario();
-					pc.setUsuario(u);
-					//fc.setUsuario(u);
 
 					Stage nuevaStage = new Stage();
 					nuevaStage.setScene(new Scene(root));
@@ -103,6 +130,11 @@ public class LoginController {
 
 	}
 
+	/**
+	 * Método que abre la ventana de Registro, cerrando la ventana actual.
+	 * 
+	 * @param event Evento de clickar en el label "Registrarse".
+	 */
 	@FXML
 	void irARegistro(MouseEvent event) {
 		try {
@@ -119,11 +151,13 @@ public class LoginController {
 		}
 	}
 
-	@FXML
-	void initialize() {
-
-	}
-
+	/**
+	 * Método que obtiene una lista de usuarios de la base de datos, y si el usuario
+	 * y la contraseña coinciden con alguna de las entidades almacenada en la base
+	 * de datos, el método devuelve true de un boolean.
+	 * 
+	 * @return Devuelve true si coinciden los datos. False en caso contrario.
+	 */
 	private boolean usuarioCorrecto() {
 		boolean usuarioCorrecto = false;
 
@@ -136,6 +170,11 @@ public class LoginController {
 		return usuarioCorrecto;
 	}
 
+	/**
+	 * Getter de usuario
+	 * 
+	 * @return Usuario
+	 */
 	private Usuario getUsuario() {
 		List<Usuario> listaUsu = usuDao.searchAll();
 		for (Usuario usu : listaUsu) {

@@ -10,6 +10,7 @@ import org.hibernate.Session;
 
 import dao.PersonajeDaoImpl;
 import dao.UsuarioPersonajesDaoImpl;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,11 +26,14 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import models.Personaje;
 import models.Usuario;
+import models.UsuarioPersonajes;
+import models.UsuarioPersonajesId;
 import resources.HibernateUtil;
 import utils.Listas;
 
 public class FavoritosController {
 
+	// Atributos
 	@FXML
 	private ResourceBundle resources;
 
@@ -183,24 +187,43 @@ public class FavoritosController {
 	PersonajeDaoImpl perDao = new PersonajeDaoImpl(session);
 	UsuarioPersonajesDaoImpl usuPerDao = new UsuarioPersonajesDaoImpl(session);
 
-	private Usuario usuario;
+	private Usuario usuario = LoginController.u;
 
+	/**
+	 * Getter usuario
+	 * 
+	 * @return usuario
+	 */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
+	/**
+	 * Método que se inicia al cargar la ventana. Añade los personajes favoritos del
+	 * usuario a la lista auxiliar. También tiene un método que termina la sesión de
+	 * Hibernate cuando se cierra la ventana.
+	 */
 	@FXML
 	void initialize() {
 		Listas.listaAuxiliar.clear();
-		Listas.listaAuxiliar.addAll(Listas.listaFavoritos);
+		Listas.listaAuxiliar.addAll(usuPerDao.personajesPorUsuario(usuario.getNombre()));
 
 		imprimirPersonajesFav();
+
+		Platform.runLater(() -> {
+			Stage stage = (Stage) panelFondo.getScene().getWindow();
+			stage.setOnCloseRequest(event -> {
+				HibernateUtil.closeSession();
+			});
+		});
 	}
 
+	/**
+	 * Carga los 5 personajes anteriores, dependiendo de cuáles estén cargados
+	 * actualmente. Si está mostrando los primeros, mostrará los últimos.
+	 * 
+	 * @param event Pulsar el botón anterior.
+	 */
 	@FXML
 	void anteriorFav(ActionEvent event) {
 		if (Listas.listaAuxiliar.size() < 6) {
@@ -217,6 +240,12 @@ public class FavoritosController {
 		imprimirPersonajesFav();
 	}
 
+	/**
+	 * Carga los 5 personajes siguientes, dependiendo de cuáles estén cargados
+	 * actualmente. Si está mostrando los últimos, mostrará los primeros.
+	 * 
+	 * @param event Pulsar el botón anterior.
+	 */
 	@FXML
 	void siguienteFav(ActionEvent event) {
 		if (Listas.listaAuxiliar.size() < 6) {
@@ -233,13 +262,19 @@ public class FavoritosController {
 		imprimirPersonajesFav();
 	}
 
+	/**
+	 * Método que modificará la lista auxiliar con los personajes que coincidan con
+	 * el texto indicado, ya sean en minúsculas o mayúsculas.
+	 * 
+	 * @param event Busca dependiendo del contenido del textfield tfBuscar.
+	 */
 	@FXML
 	void buscarFav(ActionEvent event) {
 		Listas.listaAuxiliar.clear();
 		if (tfBuscar.getText().isEmpty()) {
-			Listas.listaAuxiliar.addAll(Listas.listaFavoritos);
+			Listas.listaAuxiliar.addAll(usuPerDao.personajesPorUsuario(usuario.getNombre()));
 		} else {
-			for (Personaje p : Listas.listaFavoritos) {
+			for (Personaje p : usuPerDao.personajesPorUsuario(usuario.getNombre())) {
 				if (p.getName().toLowerCase().contains(tfBuscar.getText().toLowerCase())) {
 					Listas.listaAuxiliar.add(p);
 				}
@@ -249,31 +284,66 @@ public class FavoritosController {
 		imprimirPersonajesFav();
 	}
 
+	/**
+	 * Elimina el enlace entre el usuario y el personaje favorito que está arriba
+	 * izquierda de la ventana.
+	 * 
+	 * @param event Pulsar el botón de la 'x' que está arriba izquierda.
+	 */
 	@FXML
 	void quitarFavorito1(ActionEvent event) {
 		quitarFavoritoGeneral(pagina * 5);
 	}
 
+	/**
+	 * Elimina el enlace entre el usuario y el personaje favorito que está arriba
+	 * derecha de la ventana.
+	 * 
+	 * @param event Pulsar el botón de la 'x' que está arriba derecha.
+	 */
 	@FXML
 	void quitarFavorito2(ActionEvent event) {
 		quitarFavoritoGeneral(pagina * 5 + 1);
 	}
 
+	/**
+	 * Elimina el enlace entre el usuario y el personaje favorito que está abajo
+	 * izquierda de la ventana.
+	 * 
+	 * @param event Pulsar el botón de la 'x' que está abajo izquierda.
+	 */
 	@FXML
 	void quitarFavorito3(ActionEvent event) {
 		quitarFavoritoGeneral(pagina * 5 + 2);
 	}
 
+	/**
+	 * Elimina el enlace entre el usuario y el personaje favorito que está abajo
+	 * centro de la ventana.
+	 * 
+	 * @param event Pulsar el botón de la 'x' que está abajo centro.
+	 */
 	@FXML
 	void quitarFavorito4(ActionEvent event) {
 		quitarFavoritoGeneral(pagina * 5 + 3);
 	}
 
+	/**
+	 * Elimina el enlace entre el usuario y el personaje favorito que está abajo
+	 * derecha de la ventana.
+	 * 
+	 * @param event Pulsar el botón de la 'x' que está abajo derecha.
+	 */
 	@FXML
 	void quitarFavorito5(ActionEvent event) {
 		quitarFavoritoGeneral(pagina * 5 + 4);
 	}
 
+	/**
+	 * Método que abre la ventana de Personajes, cerrando la ventana actual.
+	 * 
+	 * @param event Evento de clickar en el botón "Volver".
+	 */
 	@FXML
 	void volver(ActionEvent event) {
 		try {
@@ -290,6 +360,10 @@ public class FavoritosController {
 		}
 	}
 
+	/**
+	 * Actualiza los datos e imágenes de los personajes favoritos según las opciones
+	 * seleccionadas.
+	 */
 	void imprimirPersonajesFav() {
 		imprimirPersonajeGeneralFav(lblPersonaje1Nombre, lblPersonaje1Estado, ivPersonaje1, btnDesfavorito1,
 				pagina * 5);
@@ -303,6 +377,18 @@ public class FavoritosController {
 				pagina * 5 + 4);
 	}
 
+	/**
+	 * Control individual de las actualizaciones de los datos de los personajes
+	 * favoritos, cambiando el nombre, el estado y la imagen del personaje. En caso
+	 * de que no haya personaje (mostrar menos personajes de 5), coloca tres guiones
+	 * como que no hay personaje, junto con una imagen de 'no imagen avaliable'.
+	 * 
+	 * @param nombre El nombre del personaje correspondiente.
+	 * @param estado El estado del personaje correspondiente.
+	 * @param imagen Url de la imagen del personaje correspondiente.
+	 * @param button Estado del botón del botón correspondiente.
+	 * @param num    Número en la posición del personaje en la lista auxiliar.
+	 */
 	void imprimirPersonajeGeneralFav(Label nombre, Label estado, ImageView imagen, Button button, int num) {
 		if (Listas.listaAuxiliar.size() > num) {
 			nombre.setText(Listas.listaAuxiliar.get(num).getName());
@@ -319,26 +405,24 @@ public class FavoritosController {
 		}
 	}
 
+	/**
+	 * Elimina tanto de la lista auxiliar el personaje como de la base de datos el
+	 * enlace entre el usuario y el personaje. Actualiza los datos.
+	 * 
+	 * @param num
+	 */
 	void quitarFavoritoGeneral(int num) {
 		int id = Listas.listaAuxiliar.get(num).getId();
-		for (Personaje p : Listas.listaFavoritos) {
-			if (p.getId() == id) {
-				Listas.listaFavoritos.remove(p);
-				break;
-			}
-		}
+		// usuPerDao.delete(new UsuarioPersonajes(new
+		// UsuarioPersonajesId(usuario.getNombre(), id)));
+		usuPerDao.eliminarPorIdPersonajeDeUsuario(usuario.getNombre(), id);
+
 		for (Personaje p : Listas.listaAuxiliar) {
 			if (p.getId() == id) {
 				Listas.listaAuxiliar.remove(p);
 				break;
 			}
 		}
-
-//		if (Listas.listaFavoritos.isEmpty()) {
-//			
-//		} else {
-//			
-//		}
 
 		imprimirPersonajesFav();
 	}

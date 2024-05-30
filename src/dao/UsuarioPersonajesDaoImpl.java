@@ -23,7 +23,6 @@ public class UsuarioPersonajesDaoImpl extends CommonDaoImpl<UsuarioPersonajes> i
 		this.session = session;
 	}
 
-
 	/**
 	 * Te devuelve la lista de personajes que el usuario haya dado como favorito.
 	 * 
@@ -42,10 +41,10 @@ public class UsuarioPersonajesDaoImpl extends CommonDaoImpl<UsuarioPersonajes> i
 	}
 
 	/**
-	 * Elimina la relación de favoritismo entre el usuario y el personaje.
+	 * Busca y elimina la relación de favoritismo entre el usuario y el personaje.
 	 * 
 	 * @param nombre Nombre del usuario
-	 * @param id Número identificador del personaje
+	 * @param id     Número identificador del personaje
 	 */
 	@Override
 	public void eliminarPorIdPersonajeDeUsuario(String nombre, int id) {
@@ -53,8 +52,12 @@ public class UsuarioPersonajesDaoImpl extends CommonDaoImpl<UsuarioPersonajes> i
 			session.getTransaction().begin();
 		}
 
-		session.delete("DELETE FROM usuario_personajes up WHERE up.id.usuario.nombre ='" + nombre
-				+ "' AND up.id.personaje.id ='" + id + "'");
+		UsuarioPersonajes up = (UsuarioPersonajes) session
+				.createQuery("select up FROM usuario_personajes up WHERE up.id.usuario.nombre ='" + nombre
+						+ "' AND up.id.personaje.id ='" + id + "'")
+				.uniqueResult();
+
+		session.delete(up);
 
 	}
 

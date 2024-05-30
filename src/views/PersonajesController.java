@@ -303,7 +303,6 @@ public class PersonajesController {
 			} else {
 				pagina++;
 			}
-			JOptionPane.showMessageDialog(null, "Estás en la página " + pagina + ".");
 			imprimirPersonajes();
 		}
 	}

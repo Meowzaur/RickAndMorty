@@ -235,7 +235,6 @@ public class FavoritosController {
 			} else {
 				pagina--;
 			}
-			JOptionPane.showMessageDialog(null, "Estás en la página " + pagina + ".");
 		}
 		imprimirPersonajesFav();
 	}
@@ -257,7 +256,6 @@ public class FavoritosController {
 			} else {
 				pagina++;
 			}
-			JOptionPane.showMessageDialog(null, "Estás en la página " + pagina + ".");
 		}
 		imprimirPersonajesFav();
 	}
@@ -413,8 +411,8 @@ public class FavoritosController {
 	 */
 	void quitarFavoritoGeneral(int num) {
 		int id = Listas.listaAuxiliar.get(num).getId();
-		// usuPerDao.delete(new UsuarioPersonajes(new
-		// UsuarioPersonajesId(usuario.getNombre(), id)));
+		
+		
 		usuPerDao.eliminarPorIdPersonajeDeUsuario(usuario.getNombre(), id);
 
 		for (Personaje p : Listas.listaAuxiliar) {

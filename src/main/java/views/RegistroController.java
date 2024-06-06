@@ -15,16 +15,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Usuario;
-import resources.HibernateUtil;
+import utils.HibernateUtil;
 
 public class RegistroController {
 
@@ -101,20 +104,27 @@ public class RegistroController {
 	void registrar(ActionEvent event) {
 		// Comprueba si hay celdas vacías
 		if (tfUsuario.getText().isEmpty() || pfPassword.getText().isEmpty() || pfRepetirPassword.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No puede haber celdas vacías.");
+			ventanaError("No puede haber celdas vacías.", "CeldasVacias");
 		} else {
 			// Comprueba que las contraseñas coincidan
 			if (pfPassword.getText().equals(pfRepetirPassword.getText())) {
 				// Comprueba que el nombre de usuario esté o no en la base de datos
 				if (nombreRepetido()) {
 
-					JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese nombre");
+					ventanaError("Ya existe un usuario con ese nombre.", "UsuarioExistente");
 
 				} else {
 					// Agrega el nuevo usuario
 					usuDao.insert(new Usuario(tfUsuario.getText(), pfPassword.getText()));
-
-					JOptionPane.showMessageDialog(null, "El nuevo usuario ha sido registrado.");
+					
+					// Mensaje de usuario correcto registrado
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Information Dialog");
+					alert.setHeaderText(null);
+					alert.setContentText("El nuevo usuario ha sido registrado.");
+					Button errorButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+			        errorButton.setId("RegistroCorrecto");
+					alert.showAndWait();
 
 					// Abre la ventana de login y cierra la ventana actual
 					try {
@@ -132,7 +142,7 @@ public class RegistroController {
 				}
 
 			} else {
-				JOptionPane.showMessageDialog(null, "Las contraseñas son distintas.");
+				ventanaError("Las contraseñas son distintas.", "PasswordsIncorrectas");
 			}
 		}
 	}
@@ -174,6 +184,22 @@ public class RegistroController {
 		}
 
 		return nombreRepetido;
+	}
+
+	/**
+	 * Método que muestra una ventana de Error
+	 * 
+	 * @param mensaje Mensaje en String con el tipo de error sucedido
+	 */
+	private void ventanaError(String mensaje, String id) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Ventana de Error");
+		alert.setHeaderText(null);
+		alert.setContentText(mensaje);
+		Button errorButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+        errorButton.setId(id);
+
+		alert.showAndWait();
 	}
 
 }

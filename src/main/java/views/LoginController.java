@@ -16,7 +16,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -25,7 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Usuario;
-import resources.HibernateUtil;
+import utils.HibernateUtil;
 
 public class LoginController {
 
@@ -98,7 +101,7 @@ public class LoginController {
 
 		// Comprueba que las celdas estén vacías.
 		if (tfUsuario.getText().isEmpty() || pfPassword.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No puede haber celdas vacías.");
+			ventanaError("No puede haber celdas vacías.", "CeldasVacias");
 		} else {
 			// Comprueba que el usuario esté en la base de datos.
 			if (usuarioCorrecto()) {
@@ -124,7 +127,7 @@ public class LoginController {
 					e.printStackTrace();
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Los datos son incorrectos.");
+				ventanaError("Los datos son incorrectos.", "DatosIncorrectos");
 			}
 		}
 
@@ -183,6 +186,22 @@ public class LoginController {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Método que muestra una ventana de Error
+	 * 
+	 * @param mensaje Mensaje en String con el tipo de error sucedido
+	 */
+	private void ventanaError(String mensaje, String id) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Ventana de Error");
+		alert.setHeaderText(null);
+		alert.setContentText(mensaje);
+		Button errorButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+        errorButton.setId(id);
+
+		alert.showAndWait();
 	}
 
 }

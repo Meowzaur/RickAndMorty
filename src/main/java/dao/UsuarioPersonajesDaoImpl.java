@@ -30,7 +30,7 @@ public class UsuarioPersonajesDaoImpl extends CommonDaoImpl<UsuarioPersonajes> i
 	 */
 	@Override
 	public List<Personaje> personajesPorUsuario(String nombre) {
-		if (!session.getTransaction().equals(TransactionStatus.ACTIVE)) {
+		if (!session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE)) {
 			session.getTransaction().begin();
 		}
 
@@ -48,7 +48,7 @@ public class UsuarioPersonajesDaoImpl extends CommonDaoImpl<UsuarioPersonajes> i
 	 */
 	@Override
 	public void eliminarPorIdPersonajeDeUsuario(String nombre, int id) {
-		if (!session.getTransaction().equals(TransactionStatus.ACTIVE)) {
+		if (!session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE)) {
 			session.getTransaction().begin();
 		}
 
@@ -58,6 +58,7 @@ public class UsuarioPersonajesDaoImpl extends CommonDaoImpl<UsuarioPersonajes> i
 				.uniqueResult();
 
 		session.delete(up);
+		session.getTransaction().commit();
 
 	}
 

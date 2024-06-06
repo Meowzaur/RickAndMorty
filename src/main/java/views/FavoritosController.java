@@ -26,9 +26,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import models.Personaje;
 import models.Usuario;
-import models.UsuarioPersonajes;
-import models.UsuarioPersonajesId;
-import resources.HibernateUtil;
+import utils.HibernateUtil;
 import utils.Listas;
 
 public class FavoritosController {
@@ -397,7 +395,7 @@ public class FavoritosController {
 		} else {
 			nombre.setText("---");
 			estado.setText("---");
-			imagen.setImage(new Image(new File("src/images/NoImagen.jpg").toURI().toString()));
+			imagen.setImage(new Image(new File("src/main/java/images/NoImagen.png").toURI().toString()));
 			button.setDisable(true);
 			button.setVisible(false);
 		}
@@ -411,8 +409,7 @@ public class FavoritosController {
 	 */
 	void quitarFavoritoGeneral(int num) {
 		int id = Listas.listaAuxiliar.get(num).getId();
-		
-		
+
 		usuPerDao.eliminarPorIdPersonajeDeUsuario(usuario.getNombre(), id);
 
 		for (Personaje p : Listas.listaAuxiliar) {

@@ -29,7 +29,7 @@ import models.Personaje;
 import models.Usuario;
 import models.UsuarioPersonajes;
 import models.UsuarioPersonajesId;
-import resources.HibernateUtil;
+import utils.HibernateUtil;
 import utils.Listas;
 
 public class PersonajesController {
@@ -224,7 +224,7 @@ public class PersonajesController {
 	 */
 	@FXML
 	void addFavorito1(ActionEvent event) {
-		addFavoritoGeneral(lblPersonaje1Nombre, btnFavorito1, pagina * 5);
+		addFavoritoGeneral(btnFavorito1, pagina * 5);
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class PersonajesController {
 	 */
 	@FXML
 	void addFavorito2(ActionEvent event) {
-		addFavoritoGeneral(lblPersonaje2Nombre, btnFavorito2, pagina * 5 + 1);
+		addFavoritoGeneral(btnFavorito2, pagina * 5 + 1);
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class PersonajesController {
 	 */
 	@FXML
 	void addFavorito3(ActionEvent event) {
-		addFavoritoGeneral(lblPersonaje3Nombre, btnFavorito3, pagina * 5 + 2);
+		addFavoritoGeneral(btnFavorito3, pagina * 5 + 2);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class PersonajesController {
 	 */
 	@FXML
 	void addFavorito4(ActionEvent event) {
-		addFavoritoGeneral(lblPersonaje4Nombre, btnFavorito4, pagina * 5 + 3);
+		addFavoritoGeneral(btnFavorito4, pagina * 5 + 3);
 	}
 
 	/**
@@ -264,7 +264,7 @@ public class PersonajesController {
 	 */
 	@FXML
 	void addFavorito5(ActionEvent event) {
-		addFavoritoGeneral(lblPersonaje5Nombre, btnFavorito5, pagina * 5 + 4);
+		addFavoritoGeneral(btnFavorito5, pagina * 5 + 4);
 	}
 
 	/**
@@ -392,7 +392,7 @@ public class PersonajesController {
 		} else {
 			nombre.setText("---");
 			estado.setText("---");
-			imagen.setImage(new Image(new File("src/images/NoImagen.jpg").toURI().toString()));
+			imagen.setImage(new Image(new File("src/main/java/images/NoImagen.png").toURI().toString()));
 			button.setDisable(true);
 			button.setVisible(false);
 		}
@@ -403,11 +403,10 @@ public class PersonajesController {
 	 * Comprueba si el personaje está asociado a favoritos del usuario, y si no
 	 * está, lo agrega a favoritos. Desactiva el botón que acaba de ser pulsado.
 	 * 
-	 * @param label  Nombre del personaje elegido.
 	 * @param button Botón cual ha sido pulsado.
 	 * @param num    Número de la lista auxiliar.
 	 */
-	private void addFavoritoGeneral(Label label, Button button, int num) {
+	private void addFavoritoGeneral(Button button, int num) {
 		if (!estaEnPersonajes(num)) {
 			perDao.insert(Listas.listaAuxiliar.get(num));
 		}
@@ -415,8 +414,6 @@ public class PersonajesController {
 		if (!estaEnFavoritos(num)) {
 			usuPerDao.insert(
 					new UsuarioPersonajes(new UsuarioPersonajesId(getUsuario(), Listas.listaAuxiliar.get(num))));
-			JOptionPane.showMessageDialog(null,
-					"El personaje " + label.getText() + " SE HA AGREGADO a tu lista de favoritos.");
 
 		}
 		button.setDisable(true);

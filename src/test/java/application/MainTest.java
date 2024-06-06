@@ -1,7 +1,11 @@
 package application;
 
 import java.io.IOException;
+
+import org.hibernate.Session;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +15,13 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
+import org.testfx.matcher.control.LabeledMatchers;
 
+import dao.UsuarioDaoImpl;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import models.Usuario;
+import utils.HibernateUtil;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -29,7 +37,7 @@ class MainTest {
 		try {
 			Parent mainNode;
 			try {
-				mainNode = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
+				mainNode = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
 				stage.setScene(new Scene(mainNode));
 				stage.show();
 				stage.toFront();
@@ -42,6 +50,20 @@ class MainTest {
 		}
 	}
 
+	@BeforeAll
+	public static void setUpAll() throws Exception {
+		Session session = HibernateUtil.getSession();
+		UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
+		usuDao.delete(new Usuario("test", "test"));
+	}
+
+	@AfterAll
+	public static void tearDownAll() throws Exception {
+		Session session = HibernateUtil.getSession();
+		UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
+		usuDao.delete(new Usuario("test", "test"));
+	}
+	
 	@BeforeEach
 	public void setUp() throws Exception {
 
@@ -91,6 +113,13 @@ class MainTest {
 	public void testRegistroPasswords() {
 		FxRobot fxRobot = new FxRobot();
 		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		fxRobot.clickOn("#lblRegistrarse");
 		fxRobot.clickOn("#tfUsuario");
 		fxRobot.write("Hola");
@@ -104,7 +133,7 @@ class MainTest {
 	}
 
 	@Test
-	public void testRegistroCoincide() {
+	public void testRegistroCoincide(){
 		FxRobot fxRobot = new FxRobot();
 		
 		fxRobot.clickOn("#lblRegistrarse");
@@ -120,7 +149,7 @@ class MainTest {
 	}
 
 	@Test
-	public void testRegistroCorrecto() {
+	public void testRegistroCorrecto(){
 		FxRobot fxRobot = new FxRobot();
 		
 		fxRobot.clickOn("#lblRegistrarse");
@@ -133,6 +162,8 @@ class MainTest {
 		fxRobot.clickOn("#btnRegistrar");
 
 		FxAssert.verifyThat("#RegistroCorrecto", NodeMatchers.isVisible());
+		
+		
 	}
 
 	@Test
@@ -145,7 +176,7 @@ class MainTest {
 		fxRobot.write("a");
 		fxRobot.clickOn("#btnLogin");
 
-		// FxAssert.verifyThat("#DatosIncorrectos", NodeMatchers.isVisible());
+		FxAssert.verifyThat("#lblTitulo1", LabeledMatchers.hasText("Todos los personajes de"));
 	}
 
 }

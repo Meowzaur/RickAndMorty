@@ -59,9 +59,6 @@ class MainTest {
 
 	@AfterAll
 	public static void tearDownAll() throws Exception {
-		Session session = HibernateUtil.getSession();
-		UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
-		usuDao.delete(new Usuario("test", "test"));
 	}
 	
 	@BeforeEach
@@ -113,17 +110,10 @@ class MainTest {
 	public void testRegistroPasswords() {
 		FxRobot fxRobot = new FxRobot();
 		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		fxRobot.clickOn("#lblRegistrarse");
-		fxRobot.clickOn("#tfUsuario");
+		fxRobot.clickOn("#tfUsuarioR");
 		fxRobot.write("Hola");
-		fxRobot.clickOn("#pfPassword");
+		fxRobot.clickOn("#pfPasswordR");
 		fxRobot.write("Hola");
 		fxRobot.clickOn("#pfRepetirPassword");
 		fxRobot.write("Adios");
@@ -137,9 +127,9 @@ class MainTest {
 		FxRobot fxRobot = new FxRobot();
 		
 		fxRobot.clickOn("#lblRegistrarse");
-		fxRobot.clickOn("#tfUsuario");
+		fxRobot.clickOn("#tfUsuarioR");
 		fxRobot.write("a");
-		fxRobot.clickOn("#pfPassword");
+		fxRobot.clickOn("#pfPasswordR");
 		fxRobot.write("a");
 		fxRobot.clickOn("#pfRepetirPassword");
 		fxRobot.write("a");
@@ -153,9 +143,9 @@ class MainTest {
 		FxRobot fxRobot = new FxRobot();
 		
 		fxRobot.clickOn("#lblRegistrarse");
-		fxRobot.clickOn("#tfUsuario");
+		fxRobot.clickOn("#tfUsuarioR");
 		fxRobot.write("test");
-		fxRobot.clickOn("#pfPassword");
+		fxRobot.clickOn("#pfPasswordR");
 		fxRobot.write("test");
 		fxRobot.clickOn("#pfRepetirPassword");
 		fxRobot.write("test");

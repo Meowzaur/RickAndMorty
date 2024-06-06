@@ -45,7 +45,7 @@ public class RegistroController {
 	private ImageView ivLogo;
 
 	@FXML
-	private Label lblPassword;
+	private Label lblPasswordR;
 
 	@FXML
 	private Label lblRegistrarse;
@@ -54,7 +54,7 @@ public class RegistroController {
 	private Label lblRepetirPassword;
 
 	@FXML
-	private Label lblUsuario;
+	private Label lblUsuarioR;
 
 	@FXML
 	private AnchorPane panelFondo;
@@ -63,13 +63,13 @@ public class RegistroController {
 	private AnchorPane panelRegistro;
 
 	@FXML
-	private PasswordField pfPassword;
+	private PasswordField pfPasswordR;
 
 	@FXML
 	private PasswordField pfRepetirPassword;
 
 	@FXML
-	private TextField tfUsuario;
+	private TextField tfUsuarioR;
 
 	Session session = HibernateUtil.getSession();
 	UsuarioDaoImpl usuDao = new UsuarioDaoImpl(session);
@@ -103,11 +103,11 @@ public class RegistroController {
 	@FXML
 	void registrar(ActionEvent event) {
 		// Comprueba si hay celdas vacías
-		if (tfUsuario.getText().isEmpty() || pfPassword.getText().isEmpty() || pfRepetirPassword.getText().isEmpty()) {
+		if (tfUsuarioR.getText().isEmpty() || pfPasswordR.getText().isEmpty() || pfRepetirPassword.getText().isEmpty()) {
 			ventanaError("No puede haber celdas vacías.", "CeldasVacias");
 		} else {
 			// Comprueba que las contraseñas coincidan
-			if (pfPassword.getText().equals(pfRepetirPassword.getText())) {
+			if (pfPasswordR.getText().equals(pfRepetirPassword.getText())) {
 				// Comprueba que el nombre de usuario esté o no en la base de datos
 				if (nombreRepetido()) {
 
@@ -115,7 +115,7 @@ public class RegistroController {
 
 				} else {
 					// Agrega el nuevo usuario
-					usuDao.insert(new Usuario(tfUsuario.getText(), pfPassword.getText()));
+					usuDao.insert(new Usuario(tfUsuarioR.getText(), pfPasswordR.getText()));
 					
 					// Mensaje de usuario correcto registrado
 					Alert alert = new Alert(AlertType.INFORMATION);
@@ -179,7 +179,7 @@ public class RegistroController {
 
 		List<Usuario> listaUsu = usuDao.searchAll();
 		for (Usuario usu : listaUsu) {
-			if (usu.getNombre().equals(tfUsuario.getText()))
+			if (usu.getNombre().equals(tfUsuarioR.getText()))
 				nombreRepetido = true;
 		}
 

@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+Test set: application.MainTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.180 s <<< FAILURE! -- in application.MainTest
+application.MainTest -- Time elapsed: 0.180 s <<< ERROR!
+org.hibernate.internal.util.config.ConfigurationException: Could not locate cfg.xml resource [hibernate.cfg.xml]
+	at org.hibernate.boot.cfgxml.internal.ConfigLoader.loadConfigXmlResource(ConfigLoader.java:53)
+	at org.hibernate.boot.registry.StandardServiceRegistryBuilder.configure(StandardServiceRegistryBuilder.java:254)
+	at org.hibernate.boot.registry.StandardServiceRegistryBuilder.configure(StandardServiceRegistryBuilder.java:243)
+	at utils.HibernateUtil.getSessionFactory(HibernateUtil.java:37)
+	at utils.HibernateUtil.getSession(HibernateUtil.java:19)
+	at application.MainTest.setUpAll(MainTest.java:55)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
